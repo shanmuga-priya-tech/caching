@@ -55,7 +55,9 @@ app.post("/item", async (req, res) => {
     const newItem = await Item.create(req.body);
 
     //once the item is added we need to clear cache to provideupdated res
-    await Cache.deleteOne({ key: `item_${req.body.category}` });
+    await Cache.deleteMany({
+      key: { $in: [`item_${req.body.category}`, "item_all"] },
+    });
 
     res.status(201).json(newItem);
   } catch (err) {
