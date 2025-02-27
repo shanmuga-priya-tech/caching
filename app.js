@@ -4,11 +4,14 @@ const dotenv = require("dotenv");
 const Item = require("./model/item");
 const { getCache, setCache } = require("./utils/cacheHelper");
 const Cache = require("./model/cache");
+const { rateLimiter } = require("./utils/ratelimiting");
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+
+app.use(rateLimiter);
 
 app.use((req, res, next) => {
   const start = Date.now();
